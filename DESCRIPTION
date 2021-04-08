@@ -1,0 +1,15 @@
+Package: msAnaLib
+Type: Package
+Title: Functions for analysis of DMS spectra
+Version: 0.0
+Authors@R: 
+    person(given = "Pascal ",
+           family = "PERNOT",
+           role = c("aut", "cre"),
+           email = "pascal.pernot@universite-paris-saclay.fr")
+Description: Functions for analysis of DMS spectra
+License: GPL (>=3) + file LICENSE
+Encoding: UTF-8
+Imports: utils,xtable,mixtools,inlmisc,rlist,repmis,assertive,data.table
+LazyData: true
+RoxygenNote: 7.1.1
