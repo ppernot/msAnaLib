@@ -2,7 +2,7 @@
 % Please edit documentation in R/setgPars.R
 \name{setgPars}
 \alias{setgPars}
-\title{Set graphical parameters}
+\title{Set default graphical parameters}
 \usage{
 setgPars()
 }
@@ -10,5 +10,5 @@ setgPars()
 
 }
 \description{
-Set graphical parameters
+Set default graphical parameters
 }

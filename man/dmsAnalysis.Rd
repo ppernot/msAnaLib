@@ -5,13 +5,13 @@
 \title{Analysis of DMS file}
 \usage{
 dmsAnalysis(
-  ms_type = c("esquire", "fticr")[1],
-  taskTable = NA,
-  tgTable = NA,
+  taskTable,
+  tgTable,
   dataRepo = "../data/",
   figRepo = "../results/figs/",
   tabRepo = "../results/tables/",
-  fit_dim = 1,
+  ms_type = c("esquire", "fticr"),
+  fit_dim = c(1, 2, 0),
   filter_results = TRUE,
   userTag = paste0("fit_dim_", fit_dim),
   save_figures = TRUE,
@@ -20,14 +20,69 @@ dmsAnalysis(
   correct_overlap = FALSE,
   weighted_fit = FALSE,
   refine_CV0 = TRUE,
-  debug = FALSE
+  debug = FALSE,
+  gPars = list(),
+  peakSpecs = list()
 )
 }
 \arguments{
-\item{debug}{}
+\item{taskTable}{(string; mandatoty) Path to tasks file.}
+
+\item{tgTable}{(string; mandatoty) Path to targets file.}
+
+\item{dataRepo}{(string; optional) Path to the data files.}
+
+\item{figRepo}{(string; optional) Path to output figures.}
+
+\item{tabRepo}{(string; optional) Path to output tables.}
+
+\item{ms_type}{(string; optional) Type of mass spectrum,
+one of `esquire` (default) or `fticr`.}
+
+\item{fit_dim}{(numeric; optional) Peak fit options.
+0: 1D fit along m/z for data at given CV value;
+1 (default): 1D fit along CV for data averaged in m/z interval;
+2: 2D fit.}
+
+\item{filter_results}{(logical, optional) Flag to filter
+fit results according to their fwhm and area.
+Constraints are provided in `peakSpecs` list.}
+
+\item{userTag}{(string; optional) string to append to results
+files.}
+
+\item{save_figures}{(logical; optional) save figures to png files
+(default: TRUE).}
+
+\item{plot_maps}{(logical; optional) plot and save DMS maps
+to png files (default: FALSE).}
+
+\item{fallback}{(logical; optional) Fallback on 1D fit
+(\code{fit_dim = 1}) when 2D fit (\code{fit_dim = 2})
+fails (default: TRUE).}
+
+\item{correct_overlap}{(logical; optional) Use a correction
+for the peaks overlap (logical: FALSE). Experimental, to be
+implemented.}
+
+\item{weighted_fit}{(logical; optional) Used weighted data for
+the fit (default: FALSE).}
+
+\item{refine_CV0}{(logical; optional) Refine the CV window to
+improve peak fit (default: TRUE).}
+
+\item{debug}{(logical; optional) Stop after the fitst task
+(default: FALSE).}
+
+\item{gPars}{(list; optional) Supersedes the default graphical
+parameters values. See \link{setgPars}.}
+
+\item{peakSpecs}{(list; optional) Supersedes the default peak
+specifications. See \link{getPeakSpecs}.
+values.}
 }
 \value{
-
+Returns nothing; used for its side effects.
 }
 \description{
 Analysis of DMS file

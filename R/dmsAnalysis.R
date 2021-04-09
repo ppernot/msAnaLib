@@ -1,34 +1,55 @@
 #' Analysis of DMS file
 #'
-#' @param ms_type
-#' @param taskTable
-#' @param tgTable
-#' @param dataRepo
-#' @param figRepo
-#' @param tabRepo
-#' @param fit_dim
-#' @param filter_results
-#' @param userTag
-#' @param save_figures
-#' @param plot_maps
-#' @param fallback
-#' @param correct_overlap
-#' @param weighted_fit
-#' @param refine_CV0
-#' @param debug
+#' @param ms_type (string; optional) Type of mass spectrum,
+#'   one of `esquire` (default) or `fticr`.
+#' @param taskTable (string; mandatoty) Path to tasks file.
+#' @param tgTable (string; mandatoty) Path to targets file.
+#' @param dataRepo (string; optional) Path to the data files.
+#' @param figRepo (string; optional) Path to output figures.
+#' @param tabRepo (string; optional) Path to output tables.
+#' @param fit_dim (numeric; optional) Peak fit options.
+#'   0: 1D fit along m/z for data at given CV value;
+#'   1 (default): 1D fit along CV for data averaged in m/z interval;
+#'   2: 2D fit.
+#' @param filter_results (logical, optional) Flag to filter
+#'   fit results according to their fwhm and area.
+#'   Constraints are provided in `peakSpecs` list.
+#' @param userTag (string; optional) string to append to results
+#'   files.
+#' @param save_figures (logical; optional) save figures to png files
+#'   (default: TRUE).
+#' @param plot_maps (logical; optional) plot and save DMS maps
+#'   to png files (default: FALSE).
+#' @param fallback (logical; optional) Fallback on 1D fit
+#'   (\code{fit_dim = 1}) when 2D fit (\code{fit_dim = 2})
+#'   fails (default: TRUE).
+#' @param correct_overlap (logical; optional) Use a correction
+#'   for the peaks overlap (logical: FALSE). Experimental, to be
+#'   implemented.
+#' @param weighted_fit (logical; optional) Used weighted data for
+#'   the fit (default: FALSE).
+#' @param refine_CV0 (logical; optional) Refine the CV window to
+#'   improve peak fit (default: TRUE).
+#' @param debug (logical; optional) Stop after the fitst task
+#'   (default: FALSE).
+#' @param gPars (list; optional) Supersedes the default graphical
+#'   parameters values. See \link{setgPars}.
+#' @param peakSpecs (list; optional) Supersedes the default peak
+#'   specifications. See \link{getPeakSpecs}.
+#'   values.
 #'
-#' @return
+#' @return Returns nothing; used for its side effects.
 #' @export
 #'
 #' @examples
 dmsAnalysis = function(
-  ms_type         = c('esquire','fticr')[1],
-  taskTable       = NA,
-  tgTable         = NA,
+  taskTable,
+  tgTable,
   dataRepo        = '../data/',
   figRepo         = '../results/figs/',
   tabRepo         = '../results/tables/',
-  fit_dim         = 1,
+  ms_type         = c('esquire','fticr'),
+  fit_dim         = c(1,2,0),
   filter_results  = TRUE,
   userTag         = paste0('fit_dim_',fit_dim),
   save_figures    = TRUE,
@@ -37,9 +58,13 @@ dmsAnalysis = function(
   correct_overlap = FALSE,
   weighted_fit    = FALSE,
   refine_CV0      = TRUE,
-  debug           = FALSE
+  debug           = FALSE,
+  gPars           = list(),
+  peakSpecs       = list()
 ) {
+  #*********************************************************
   # Changes ----
+  #*********************************************************
   #
   # 2020_07_16 [PP]
   # - Added 2 new colums to results table
@@ -81,37 +106,94 @@ dmsAnalysis = function(
   #   * changed logic on fwhm fit constraints
   #     Fit is now always constrained in fit1D_MS(),
   #     fit_1D() and fit_2D()
+  # 2021_04_09 [PP]
+  # - Changed to function in msAnaLib package
   #
-  #---
+  #*********************************************************
 
-  options(
-    warn = 0,
-    stringsAsFactors = FALSE
-  )
+  options(stringsAsFactors = FALSE)
 
+  #*********************************************************
   # Graphical params for external and local plots
-  gPars = setgPars()
+  #*********************************************************
+  ## Get default params
+  gParsDef = setgPars()
+  ## Override by user's specs, if any
+  if(!is.list(gPars)) {
+    message('>>> Argument gPars should be a list !\n')
+    stop(call.=FALSE)
+  } else {
+    if(length(gPars) != 0) {
+      for (n in names(gPars)) {
+        if(!n %in% names(gParsDef)) {
+          message('>>> Incorrect variable name in gPars: ',n,'\n')
+          stop(call.=FALSE)
+        }
+        gParsDef[[n]] = rlist::list.extract(gPars, n)
+      }
+    }
+  }
+  gPars =gParsDef
   gParsLoc = gPars
   gParsLoc$cex = 1
   gParsLoc$lwd = 1.5
 
-  # Get apparatus-dependent specifications ----
-  peakSpecs   = getPeakSpecs(ms_type)
+  #*********************************************************
+  # Set apparatus-dependent specifications ----
+  #*********************************************************
+  ## Get default specs
+  peakSpecsDef = getPeakSpecs(ms_type)
+  for (n in names(peakSpecsDef))
+    assign(n, rlist::list.extract(peakSpecsDef, n))
+  ## Override by user's specs, if any
+  if(!is.list(peakSpecs)) {
+    message('>>> Argument peakSpecs should be a list !\n')
+    stop(call.=FALSE)
+  } else {
+    if(length(peakSpecs) != 0) {
+      for (n in names(peakSpecs)) {
+        if(!n %in% names(peakSpecsDef)) {
+          message('>>> Incorrect variable name in peakSpecs: ',n,'\n')
+          stop(call.=FALSE)
+        }
+        assign(n, rlist::list.extract(peakSpecs, n))
+      }
+    }
+  }
+  #*********************************************************
 
-  fwhm_mz_min = peakSpecs$fwhm_mz_min
-  fwhm_mz_max = peakSpecs$fwhm_mz_max
-  fwhm_mz_nom = peakSpecs$fwhm_mz_nom
-  dmz         = peakSpecs$dmz
+  #*********************************************************
+  # Check sanity of parameters ----
+  #*********************************************************
 
-  fwhm_cv_min = peakSpecs$fwhm_cv_min
-  fwhm_cv_max = peakSpecs$fwhm_cv_max
-  fwhm_cv_nom = peakSpecs$fwhm_cv_nom
-  dCV         = peakSpecs$dCV
+  ms_type = match.arg(ms_type)
+  fit_dim = match.arg(fit_dim)
 
-  baseline_cor = peakSpecs$baseline_cor
-  area_min     = peakSpecs$area_min
+  assertive::assert_all_are_existing_files(dataRepo)
+  assertive::assert_all_are_existing_files(figRepo)
+  assertive::assert_all_are_existing_files(tabRepo)
 
+  file = file.path(dataRepo, tgTable)
+  assertive::assert_all_are_existing_files(file)
+
+  file = file.path(dataRepo, taskTable)
+  assertive::assert_all_are_existing_files(file)
+
+  for(arg in c('fwhm_mz_min','fwhm_mz_max',
+               'fwhm_cv_min','fwhm_cv_max',
+               'area_min','dmz','dCV')     ) {
+    val = get(arg)
+    assertive::assert_is_numeric(val)
+    if(!assertive::is_positive(val)) {
+      message('>>> Error: ',arg,' =', val,' should be positive')
+      stop(call. = FALSE)
+    }
+  }
+  #*********************************************************
+
+  #*********************************************************
   # Gather run params for reproducibility ----
+  #*********************************************************
   ctrlParams = list(
     userTag        = userTag,
     ms_type        = ms_type,
@@ -134,72 +216,40 @@ dmsAnalysis = function(
     refine_CV0     = refine_CV0,
     baseline_cor   = baseline_cor
   )
+  #*********************************************************
 
-  # Check sanity of parameters ----
-  assertive::assert_all_are_existing_files(dataRepo)
-  assertive::assert_all_are_existing_files(figRepo)
-  assertive::assert_all_are_existing_files(tabRepo)
-
-  file = paste0(dataRepo, tgTable)
-  assertive::assert_all_are_existing_files(file)
-
-  file = paste0(dataRepo, taskTable)
-  assertive::assert_all_are_existing_files(file)
-
-  assertive::assert_is_numeric(fwhm_mz_min)
-  if(!assertive::is_positive(fwhm_mz_min))
-    stop(paste0('Erreur: fwhm_mz_min =',
-                fwhm_mz_min,' should be positive'))
-
-  assertive::assert_is_numeric(fwhm_mz_max)
-  if(!assertive::is_positive(fwhm_mz_max))
-    stop(paste0('Erreur: fwhm_mz_max =',
-                fwhm_mz_max,' should be positive'))
-
-  assertive::assert_is_numeric(fwhm_cv_min)
-  if(!assertive::is_positive(fwhm_cv_min))
-    stop(paste0('Erreur: fwhm_cv_min =',
-                fwhm_cv_min,' should be positive'))
-
-  assertive::assert_is_numeric(fwhm_cv_max)
-  if(!assertive::is_positive(fwhm_cv_max))
-    stop(paste0('Erreur: fwhm_cv_max =',
-                fwhm_cv_max,' should be positive'))
-
-  assertive::assert_is_numeric(area_min)
-  if(!assertive::is_positive(area_min))
-    stop(paste0('Erreur: area_min =',area_min
-                ,' should be positive'))
-
-  assertive::assert_is_numeric(dmz)
-  if(!assertive::is_positive(dmz))
-    stop(paste0('Erreur: dmz =',dmz,' should be positive'))
-
-  assertive::assert_is_numeric(dCV)
-  if(!assertive::is_positive(dCV))
-    stop(paste0('Erreur: dCV =',dCV,' should be positive'))
-
+  #*********************************************************
   # Get targets ----
+  #*********************************************************
   targets = msAnaLib::readTargetsFile(paste0(dataRepo, tgTable))
-  empty = rep(NA,nrow(targets))
-  if(!'CV_ref' %in% colnames(targets))
-    targets = cbind(targets,CV_ref=empty)
+  empty = rep(NA, nrow(targets))
+  if (!'CV_ref' %in% colnames(targets))
+    targets = cbind(targets, CV_ref = empty)
+  #*********************************************************
 
+  #*********************************************************
   # Get tasks list ----
+  #*********************************************************
   Tasks = msAnaLib::readTasksFile(paste0(dataRepo, taskTable))
+  #*********************************************************
 
+  #*********************************************************
   # Check that files exist before proceeding
+  #*********************************************************
   if('path' %in% colnames(Tasks)) {
-    files = paste0(dataRepo,Tasks[,'path'],Tasks[,'MS_file'])
+    files = paste0(dataRepo, Tasks[, 'path'], Tasks[, 'MS_file'])
   } else {
-    files = paste0(dataRepo,Tasks[,'MS_file'])
+    files = paste0(dataRepo, Tasks[, 'MS_file'])
   }
   assertive::assert_all_are_existing_files(files)
 
   files = paste0(dataRepo,Tasks[,'DMS_file'])
   assertive::assert_all_are_existing_files(files)
+  #*********************************************************
 
+  #*********************************************************
   # Loop over tasks ----
+  #*********************************************************
   dilu = NA
   for(task in 1:nrow(Tasks)) {
 
@@ -215,15 +265,20 @@ dmsAnalysis = function(
     # Build tag
     tag  = msAnaLib::makeTag(CVTable, msTable, userTag)
 
+    #*********************************************************
     ## Get MS ----
+    #*********************************************************
     file = paste0(dataRepo, dataPath, msTable)
     lMS  = msAnaLib::getMS(file, ms_type)
     time = lMS$time
     mz   = lMS$mz
     MS   = lMS$MS
     rm(lMS) # Clean-up memory
+    #*********************************************************
 
+    #*********************************************************
     # Get CV ----
+    #*********************************************************
     file = paste0(dataRepo, CVTable)
     CV0 = utils::read.table(
       file = file,
@@ -232,8 +287,11 @@ dmsAnalysis = function(
       stringsAsFactors = FALSE
     )
     CV = rev(CV0[, 4]) # We want increasing CVs
+    #*********************************************************
 
+    #*********************************************************
     ## Ensure CV & MS tables conformity
+    #*********************************************************
     t0   = Tasks[task,'t0']
     it   = which.min(abs(time - t0))
     selt = which(time >= time[it])
@@ -253,9 +311,13 @@ dmsAnalysis = function(
     MS   = apply(MS, 2, rev) # reverse column to conform with CV
     CV   = CV[selCV]
     nCV  = length(CV)
+    #*********************************************************
 
+    #*********************************************************
     # Baseline correction ----
+    #*********************************************************
     MS = msAnaLib::bslCorMS(MS, baseline_cor)
+    #*********************************************************
 
     ## Initialize results table
     resu = cbind(
@@ -290,12 +352,17 @@ dmsAnalysis = function(
       colnames(xfi) = c('time','CV')
     }
 
+    #*********************************************************
     # Loop over targets ----
+    #*********************************************************
     for( it in 1:nrow(targets) ) {
 
       mz0 = targets[it,'m/z_ref']
       CV0 = targets[it,'CV_ref']
 
+      #*********************************************************
+      ## Fit ----
+      #*********************************************************
       if(fit_dim == 2) {
         # 2D fit of peaks
         fitOut = msAnaLib::fit2D(
@@ -347,7 +414,11 @@ dmsAnalysis = function(
         )
         dimfit = 0
       }
+      #*********************************************************
 
+      #*********************************************************
+      # Extract fit results ----
+      #*********************************************************
       for (n in names(fitOut))
         assign(n,rlist::list.extract(fitOut,n))
 
@@ -369,7 +440,9 @@ dmsAnalysis = function(
         for (n in names(peakPars))
           assign(n,rlist::list.extract(peakPars,n))
 
+        #*********************************************************
         # Quality control
+        #*********************************************************
         if(filter_results &
            (
              ifelse(
@@ -406,8 +479,11 @@ dmsAnalysis = function(
       resu[it,'fit_dim'] = dimfit
       resu[it,'dilu'] = dilu
       resu[it,'tag'] = tag
+      #*********************************************************
 
+      #*********************************************************
       # Plot data and fit results
+      #*********************************************************
       pars = paste0(
         ifelse (warning, '** WARNING **\n','') ,
         ifelse(dimfit == 1,
@@ -441,7 +517,8 @@ dmsAnalysis = function(
       )
 
       if(save_figures) {
-        png(filename = paste0(figRepo, tag, '_', targets[it, 1], '.png'),
+        png(filename = paste0(figRepo, tag, '_',
+                              targets[it, 1], '.png'),
             width    = 2*gPars$reso,
             height   =   gPars$reso )
         msAnaLib::plotPeak(
@@ -457,8 +534,11 @@ dmsAnalysis = function(
         )
         dev.off()
       }
+      #*********************************************************
 
+      #*********************************************************
       # Save XIC and fit file
+      #*********************************************************
       nam0 = colnames(xic)
       if(fit_dim == 0) {
         xic = cbind(xic,mMStot)
@@ -471,11 +551,12 @@ dmsAnalysis = function(
       }
       colnames(xic) = c(nam0,targets[it,1])
       colnames(xfi) = c(nam0,targets[it,1])
-
-      # if(debug) break
+      #*********************************************************
     }
 
+    #*********************************************************
     # Global Heat maps
+    #*********************************************************
     if(plot_maps) {
       mex = targets[,'m/z_ref']
       msAnaLib::plotMaps(
@@ -507,8 +588,11 @@ dmsAnalysis = function(
         dev.off()
       }
     }
+    #*********************************************************
 
-    # Save results
+    #*********************************************************
+    ## Save results ----
+    #*********************************************************
     write.csv(resu,
               file = paste0(tabRepo, tag, '_results.csv'),
               row.names = FALSE)
@@ -518,7 +602,6 @@ dmsAnalysis = function(
     write.csv(xfi,
               file  = paste0(tabRepo, tag, '_fit.csv'),
               row.names = FALSE)
-
     # Metadata
     rlist::list.save(
       ctrlParams,
@@ -527,14 +610,19 @@ dmsAnalysis = function(
         paste0(tag,'_ctrlParams.yaml')
       )
     )
+    #*********************************************************
 
     if(debug){
       message('Ended prematurely (debug)...')
       stop(call. = FALSE)
     }
 
+    #*********************************************************
     # End of targets loop ----
+    #*********************************************************
   }
 
+  #*********************************************************
   # End of tasks loop ----
+  #*********************************************************
 }

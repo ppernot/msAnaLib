@@ -4,13 +4,17 @@
 \alias{getMS}
 \title{Get MS from file}
 \usage{
-getMS(file, ms_type = "esquire")
+getMS(file, ms_type = c("esquire", "fticr"))
 }
 \arguments{
-\item{ms_type}{}
+\item{file}{(string; mandatory) Path to DMS file}
+
+\item{ms_type}{(string; optional) Type of mass spectrum,
+one of `esquire` (default) or `fticr`.}
 }
 \value{
-
+List of three elements: `mz` = vector of m/z coordinates,
+  `time` = vector of time coordinates, and `MS` = DMS matrix.
 }
 \description{
 Get MS from file

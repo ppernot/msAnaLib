@@ -4,13 +4,24 @@
 \alias{getPeakSpecs}
 \title{Get apparatus-based specifications for peaks}
 \usage{
-getPeakSpecs(ms_type)
+getPeakSpecs(ms_type = c("esquire", "fticr"))
 }
 \arguments{
-\item{ms_type}{}
+\item{ms_type}{(string; optional) Type of mass spectrum,
+one of `esquire` (default) or `fticr`.}
 }
 \value{
-
+A list with the following arguments:
+\describe{
+  \item{fwhm_mz_min, fwhm_mz_max}{Acceptable range for m/z peak width.}
+  \item{fwhm_mz_nom}{Nominal value of m/z peak width.}
+  \item{dmz}{Width of mz window around exact mz for signal averaging.}
+  \item{baseline_cor}{Baseline correction method (see\link{bslCorMS})}
+  \item{fwhm_cv_min, fwhm_cv_max}{Acceptable range for CV peak width.}
+  \item{fwhm_cv_nom}{Nominal value of CV peak width.}
+  \item{dCV}{Width of CV window around CV_ref for peak fit.}
+  \item{area_min}{Minimal peak area for filtering}
+}
 }
 \description{
 Get apparatus-based specifications for peaks

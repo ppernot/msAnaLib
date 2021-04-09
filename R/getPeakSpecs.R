@@ -1,15 +1,28 @@
 #' Get apparatus-based specifications for peaks
 #'
-#' @param ms_type
+#' @param ms_type (string; optional) Type of mass spectrum,
+#'   one of `esquire` (default) or `fticr`.
 #'
-#' @return
+#' @return A list with the following arguments:
+#' \describe{
+#'   \item{fwhm_mz_min, fwhm_mz_max}{Acceptable range for m/z peak width.}
+#'   \item{fwhm_mz_nom}{Nominal value of m/z peak width.}
+#'   \item{dmz}{Width of mz window around exact mz for signal averaging.}
+#'   \item{baseline_cor}{Baseline correction method (see\link{bslCorMS})}
+#'   \item{fwhm_cv_min, fwhm_cv_max}{Acceptable range for CV peak width.}
+#'   \item{fwhm_cv_nom}{Nominal value of CV peak width.}
+#'   \item{dCV}{Width of CV window around CV_ref for peak fit.}
+#'   \item{area_min}{Minimal peak area for filtering}
+#' }
+#'
 #' @export
 #'
 #' @examples
-getPeakSpecs = function(ms_type) {
+getPeakSpecs = function(
+  ms_type = c('esquire','fticr')
+) {
 
-  if(! ms_type %in% c('esquire','fticr'))
-    stop('>>> Bad ms_type !')
+  ms_type = match.arg(ms_type)
 
   if(ms_type == 'fticr') {
 

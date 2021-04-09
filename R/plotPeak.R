@@ -82,6 +82,8 @@ plotPeak = function(
     if(type == 'CV')
       rect(CVlimf[1], mz1, CVlimf[2], mz2,
            col = cols_tr[4], border = NA)
+  } else {
+    v = rep(NA,5)
   }
 
 

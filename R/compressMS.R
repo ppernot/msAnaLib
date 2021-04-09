@@ -1,14 +1,24 @@
 #' Down-sample a FT-ICR MS by choosing points closest to a preset
 #' regular grid or around a set of targets.
 #'
-#' @param file_in
-#' @param file_out
-#' @param ms_type
-#' @param mzMin
-#' @param mzMax
-#' @param dmz
+#' @param file_in (string; mandatory) Input DMS file to be compressed
+#' @param file_out (string; mandatory) Output (compressed) file
+#' @param ms_type (string; optional) Type of mass spectrum,
+#'   one of `esquire` or `fticr` (default).
+#'   Compression only for `fticr` MS.
+#' @param compMode (string; optional) Compression mode:
+#'   either `grid`, `targets` (default),
+#'   or their combination `grid+targets`.
+#' @param mzMin (numeric; optional) Min m/z value of compression grid
+#' @param mzMax (numeric; optional) Max m/z value of compression grid
+#' @param dmz (numeric; optional) m/z step or compression grid
+#' @param targets (string; optional)  Path to targets file.
+#' @param dmzTargets (numeric; optional) Half-width of m/z interval
+#'   centered on target reference m/z value.
+#' @param test (logical; optional) if TRUE, shodt run to check the
+#'   arguments validity and the compression efficiency
 #'
-#' @return Nothing. Used for its side effects.
+#' @return Returns nothing. It is used for its side effects.
 #' @export
 #'
 #' @examples
@@ -21,7 +31,7 @@ compressMS = function(file_in,
                       test     = FALSE,
                       compMode = 'grid+targets',
                       targets  = NA,
-                      dmzTarget = 1
+                      dmzTarget = 0.5
 ) {
 
   if(ms_type == 'esquire') {
@@ -122,7 +132,8 @@ compressMS = function(file_in,
         cat('>>> Size of filtered MS in memory:',
             format(object.size(MS1),units='Mb'),'\n')
       if(test) {
-        stop('>>> Stopped by test=TRUE',call. = FALSE)
+        message('>>> Stopped by test=TRUE \n')
+        stop(call. = FALSE)
       }
       ## Save to file
       data.table::fwrite(
