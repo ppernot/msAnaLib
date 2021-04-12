@@ -1,13 +1,17 @@
 #' Trapezoidal integration
 #'
-#' @param x
-#' @param y
+#' @param x (vector) x values
+#' @param y (vector) y = f(x) values
 #'
-#' @return
+#' @return The trapezpoidal integration value.
+#'
 #' @export
 #'
 #' @examples
-trapz = function (x, y) {
+trapz = function (
+  x,
+  y
+) {
   if(length(x) == 0)
     return(0)
   idx = 2:length(x)

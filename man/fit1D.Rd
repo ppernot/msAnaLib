@@ -2,7 +2,8 @@
 % Please edit documentation in R/fit1D.R
 \name{fit1D}
 \alias{fit1D}
-\title{1D peak fit along CV axis}
+\title{1D Gaussian peak fit along CV axis of a DMS signal
+averaged over a m/z window}
 \usage{
 fit1D(
   mz0,
@@ -19,11 +20,45 @@ fit1D(
 )
 }
 \arguments{
-\item{correct_overlap}{}
+\item{mz0}{(numeric) Center of the averaging window.}
+
+\item{CV0}{(numeric) Center of the fit window}
+
+\item{dmz}{(numeric) Width of the averaging window.}
+
+\item{dCV}{(numeric) Width of the fit window.}
+
+\item{mz}{(vector) m/z vector}
+
+\item{CV}{(vector) CV vector}
+
+\item{MS}{(matrix) DMS matrix}
+
+\item{fwhm_cv_nom}{(numeric) Initial value for the peak FWHM.}
+
+\item{weighted}{(logical; optional) Poisson weighting of data
+(default: FALSE).}
+
+\item{refine_CV0}{(logical; optional) Center the fit window on the
+max of the signal (default: FALSE).}
+
+\item{correct_overlap}{(logical; optional) Use a correction
+for the peaks overlap (logical: FALSE). Experimental, to be
+implemented.}
 }
 \value{
-
+A list with components:
+\describe{
+ \item{res}{a \link{stats::nls} object containing the fit results}
+ \item{mz0}{the center of the averaging window.}
+ \item{mz1}{the lower bound of the averaging window.}
+ \item{mz2}{the upper bound of the averaging window.}
+ \item{CV}{CV vector.}
+ \item{mMS}{averaged DMS vector used for the fit}
+ \item{CVf}{CV vector in the fit window}
+}
 }
 \description{
-1D peak fit along CV axis
+1D Gaussian peak fit along CV axis of a DMS signal
+averaged over a m/z window
 }

@@ -1,13 +1,35 @@
 #' Extract parameters from 1D peak fit
 #'
-#' @param res
-#' @param fit_dim
+#' @param res (nls-object) a nls fit result
+#' @param fit_dim (integer) dimension of the fit (0 or 1)
+
 #'
-#' @return
+#' @return A list of best-fit parameters:
+#' \describe{
+#'   \item{v}{vector of Gaussian peak best-fit parameters}
+#'   \item{u_v}{uncertainty on v elements}
+#'   \item{mzopt}{peak center along m/z}
+#'   \item{u_mz}{uncertainty on mzopt}
+#'   \item{cvopt}{peak center along CV}
+#'   \item{u_cv}{uncertainty on cvopt}
+#'   \item{fwhm_mz}{peak FWHM along m/z}
+#'   \item{u_fwhm_mz}{uncertainty on fwhm_mz}
+#'   \item{fwhm_cv}{peak FWHM along CV}
+#'   \item{u_fwhm_cv}{uncertainty on fwhm_cv}
+#'   \item{area}{peak area}
+#'   \item{u_area}{uncertainty on area}
+#' }
+#'
 #' @export
 #'
 #' @examples
-getPars1D <- function(res, fit_dim) {
+getPars1D <- function(
+  res,
+  fit_dim = c(1,0)
+) {
+
+  fit_dim = match.arg(fit_dim)
+
   # Get best params and uncertainty
   v   = summary(res)$parameters[,"Estimate"]   # Best params
   u_v = summary(res)$parameters[,"Std. Error"] # Uncertainty

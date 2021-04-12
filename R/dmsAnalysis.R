@@ -15,7 +15,7 @@
 #'   fit results according to their fwhm and area.
 #'   Constraints are provided in `peakSpecs` list.
 #' @param userTag (string; optional) string to append to results
-#'   files.
+#'   filenames.
 #' @param save_figures (logical; optional) save figures to png files
 #'   (default: TRUE).
 #' @param plot_maps (logical; optional) plot and save DMS maps
@@ -406,8 +406,7 @@ dmsAnalysis = function(
       } else {
         # 1D m/z fit of peak; fixed CV
         fitOut = msAnaLib::fit1D_MS(
-          mz0, CV0,
-          dmz, dCV,
+          mz0, CV0, dmz,
           mz, CV, MS,
           weighted = weighted_fit,
           fwhm_mz_nom = fwhm_mz_nom

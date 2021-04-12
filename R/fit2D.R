@@ -1,19 +1,35 @@
 #' 2D peak fit
 #'
-#' @param mz0
-#' @param CV0
-#' @param dmz
-#' @param dCV
-#' @param mz
-#' @param CV
-#' @param MS
-#' @param fwhm_mz_nom
-#' @param fwhm_cv_nom
-#' @param weighted
-#' @param refine_CV0
-#' @param correct_overlap
+#' @param mz0 (numeric) Center of the m/z fit window.
+#' @param CV0 (numeric) Center of the CV fit window
+#' @param dmz (numeric) Width of the m/z fit window.
+#' @param dCV (numeric) Width of the CV fit window.
+#' @param mz (vector) m/z vector
+#' @param CV (vector) CV vector
+#' @param MS (matrix) DMS matrix
+#' @param fwhm_mz_nom (numeric) Initial value for the m/z peak FWHM.
+#' @param fwhm_cv_nom (numeric) Initial value for the CV peak FWHM.
+#' @param weighted (logical; optional) Poisson weighting of data
+#'   (default: FALSE).
+#' @param refine_CV0 (logical; optional) Center the CV fit window on the
+#'   max of the signal (default: FALSE).
+#' @param correct_overlap (logical; optional) Use a correction
+#'   for the peaks overlap (logical: FALSE). Experimental, to be
+#'   implemented.
 #'
-#' @return
+#'
+#' @return A list with elements:
+#' \describe{
+#'  \item{res}{a \link{stats::nls} object containing the fit results}
+#'  \item{mz0}{the center of the m/z fit window.}
+#'  \item{mz1}{the lower bound of the m/z fit window.}
+#'  \item{mz2}{the upper bound of the m/z fit window.}
+#'  \item{CVf}{CV vector in fit window.}
+#'  \item{mMS}{Averaged spectrum along the CV axis.}
+#'  \item{mMStot}{Same as mMS ???}
+#'  \item{mzloc}{m/z vector in the fit window.}
+#'  \item{MSloc}{DMS signal in the fit window.}
+#' }
 #' @export
 #'
 #' @examples

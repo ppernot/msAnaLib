@@ -1,22 +1,32 @@
-#' 1D peak fit along m/z axis
+#' 1D Gaussian peak fit along m/z axis
 #'
-#' @param mz0
-#' @param CV0
-#' @param dmz
-#' @param dCV
-#' @param mz
-#' @param CV
-#' @param MS
-#' @param fwhm_mz_nom
-#' @param weighted
+#' @param mz0 (numeric) Center of the fit window.
+#' @param CV0 (numeric) CV reference value to extract mass spectrum from
+#'   MS matrix
+#' @param dmz (numeric) Width of the fit window.
+#' @param mz (vector) m/z vector
+#' @param CV (vector) CV vector
+#' @param MS (matrix) DMS matrix
+#' @param fwhm_mz_nom (numeric) Initial value for the peak FWHM.
+#' @param weighted (logical; optional) Poisson weighting of data
+#'   (default: FALSE).
 #'
-#' @return
+#' @return A list with components:
+#' \describe{
+#'  \item{mzl}{m/z vector of fit window.}
+#'  \item{MSl}{MS vector in fit window}
+#'  \item{res}{a \link{stats::nls} object containing the fit results}
+#'  \item{mz0}{the center of the fit window.}
+#'  \item{mz1}{the lower bound of the fit window.}
+#'  \item{mz2}{the upper bound of the fit window.}
+#'  \item{CV}{CV vector.}
+#'  \item{mMStot}{full MS vector at CV reference value}
+#' }
 #' @export
 #'
 #' @examples
 fit1D_MS <- function(
-  mz0, CV0,
-  dmz, dCV,
+  mz0, CV0, dmz,
   mz, CV, MS,
   fwhm_mz_nom,
   weighted = FALSE

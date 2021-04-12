@@ -1,13 +1,17 @@
-#' Calculate 1D peak shape
+#' Calculate 1D Gaussian peak shape
 #'
-#' @param x
-#' @param p
+#' @param x (vector) a vector of coordinales
+#' @param p (named vector) a named vector of parameters
 #'
-#' @return
+#' @return A vector of peak intensity values
+#'
 #' @export
 #'
 #' @examples
-peakShape = function(x, p) {
+peakShape = function(
+  x,
+  p
+) {
   if(length(p)==3)
     p['A'] / (sqrt(2*pi) * p['sigma'] ) *
     exp(-1/2*(x-p['mu'])^2/p['sigma']^2)

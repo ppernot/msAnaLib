@@ -2,16 +2,18 @@
 % Please edit documentation in R/peakShape.R
 \name{peakShape}
 \alias{peakShape}
-\title{Calculate 1D peak shape}
+\title{Calculate 1D Gaussian peak shape}
 \usage{
 peakShape(x, p)
 }
 \arguments{
-\item{p}{}
+\item{x}{(vector) a vector of coordinales}
+
+\item{p}{(named vector) a named vector of parameters}
 }
 \value{
-
+A vector of peak intensity values
 }
 \description{
-Calculate 1D peak shape
+Calculate 1D Gaussian peak shape
 }

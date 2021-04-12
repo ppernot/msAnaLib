@@ -1,14 +1,19 @@
-#' Create tag
+#' Create a tag from DMS and CV filenames and a user tag.
 #'
-#' @param CVTable
-#' @param msTable
-#' @param userTag
+#' @param CVTable (string) name of CV file.
+#' @param msTable (string) name of ms file.
+#' @param userTag (string) string to append to results filenames.
 #'
 #' @return
 #' @export
 #'
 #' @examples
-makeTag <- function(CVTable, msTable, userTag) {
+makeTag <- function(
+  CVTable,
+  msTable,
+  userTag
+) {
+  # Extract date from CV filename
   date =
     strsplit(
       strsplit(
@@ -17,7 +22,7 @@ makeTag <- function(CVTable, msTable, userTag) {
       )[[1]][2],
       split = '-'
     )[[1]][1]
-
+  # Build tag
   tag = paste0(
     date,'_',
     strsplit(msTable, split='\\.')[[1]][1],

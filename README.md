@@ -6,8 +6,6 @@ R package for the analysis of DMS spectra.
 
 ## Install
 
-You should install this package in R from GitHub by executing
-
 ```r
 install.packages("devtools")
 devtools::install_github("ppernot/msAnaLib")

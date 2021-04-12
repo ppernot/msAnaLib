@@ -1,9 +1,17 @@
-#' Weighted mean and uncertainty
+#' Weighted mean and uncertainty by the Dersimonian-Laird method.
 #'
-#' @param x
-#' @param ux
+#' A dark uncertainty component is added for the statistical
+#' compatibility of the averaged values.
 #'
-#' @return
+#' @param x (vector) set of values to be averages.
+#' @param ux (vector) uncertainties of values to be averaged.
+#'
+#' @return A list with elements:
+#' \describe{
+#'   \item{wm}{Weighted mean.}
+#'   \item{uwm}{Uncertainty of the weighted mean.}
+#' }
+#'
 #' @export
 #'
 #' @examples

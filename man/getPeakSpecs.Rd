@@ -20,7 +20,7 @@ A list with the following arguments:
   \item{fwhm_cv_min, fwhm_cv_max}{Acceptable range for CV peak width.}
   \item{fwhm_cv_nom}{Nominal value of CV peak width.}
   \item{dCV}{Width of CV window around CV_ref for peak fit.}
-  \item{area_min}{Minimal peak area for filtering}
+  \item{area_min}{Minimal peak area for filtering.}
 }
 }
 \description{

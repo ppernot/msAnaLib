@@ -49,7 +49,7 @@ fit results according to their fwhm and area.
 Constraints are provided in `peakSpecs` list.}
 
 \item{userTag}{(string; optional) string to append to results
-files.}
+filenames.}
 
 \item{save_figures}{(logical; optional) save figures to png files
 (default: TRUE).}

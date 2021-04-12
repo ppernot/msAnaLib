@@ -12,7 +12,7 @@
 #'   \item{fwhm_cv_min, fwhm_cv_max}{Acceptable range for CV peak width.}
 #'   \item{fwhm_cv_nom}{Nominal value of CV peak width.}
 #'   \item{dCV}{Width of CV window around CV_ref for peak fit.}
-#'   \item{area_min}{Minimal peak area for filtering}
+#'   \item{area_min}{Minimal peak area for filtering.}
 #' }
 #'
 #' @export
@@ -36,8 +36,9 @@ getPeakSpecs = function(
     # Width of mz window around exact mz for signal averaging
     dmz = 5 * fwhm_mz_nom # ~ 10-sigma interval
 
-    # Constant baseline over all matrix; median estimator
-    baseline_cor = 'global+median'
+    # Constant baseline over all matrix; median estimator seems
+    # OK for the TI-CR spectra tested so far...
+    baseline_cor = 'median+global'
 
   } else { # Default: Esquire
 
@@ -51,7 +52,7 @@ getPeakSpecs = function(
     # Width of mz window around exact mz for signal averaging
     dmz = 5 * fwhm_mz_nom
 
-    # Constant baseline over all matrix; median estimator
+    # Esquire MSs require no baseline correction
     baseline_cor = NULL
 
   }

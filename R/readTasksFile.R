@@ -1,8 +1,9 @@
 #' Read tasks file
 #'
-#' @param file
+#' @param file (string) a filename
 #'
-#' @return
+#' @return A dataframe
+#'
 #' @export
 #'
 #' @examples

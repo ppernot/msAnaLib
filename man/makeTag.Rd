@@ -2,16 +2,20 @@
 % Please edit documentation in R/makeTag.R
 \name{makeTag}
 \alias{makeTag}
-\title{Create tag}
+\title{Create a tag from DMS and CV filenames and a user tag.}
 \usage{
 makeTag(CVTable, msTable, userTag)
 }
 \arguments{
-\item{userTag}{}
+\item{CVTable}{(string) name of CV file.}
+
+\item{msTable}{(string) name of ms file.}
+
+\item{userTag}{(string) string to append to results filenames.}
 }
 \value{
 
 }
 \description{
-Create tag
+Create a tag from DMS and CV filenames and a user tag.
 }

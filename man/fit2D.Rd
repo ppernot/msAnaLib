@@ -20,10 +20,47 @@ fit2D(
 )
 }
 \arguments{
-\item{correct_overlap}{}
+\item{mz0}{(numeric) Center of the m/z fit window.}
+
+\item{CV0}{(numeric) Center of the CV fit window}
+
+\item{dmz}{(numeric) Width of the m/z fit window.}
+
+\item{dCV}{(numeric) Width of the CV fit window.}
+
+\item{mz}{(vector) m/z vector}
+
+\item{CV}{(vector) CV vector}
+
+\item{MS}{(matrix) DMS matrix}
+
+\item{fwhm_mz_nom}{(numeric) Initial value for the m/z peak FWHM.}
+
+\item{fwhm_cv_nom}{(numeric) Initial value for the CV peak FWHM.}
+
+\item{weighted}{(logical; optional) Poisson weighting of data
+(default: FALSE).}
+
+\item{refine_CV0}{(logical; optional) Center the CV fit window on the
+max of the signal (default: FALSE).}
+
+\item{correct_overlap}{(logical; optional) Use a correction
+for the peaks overlap (logical: FALSE). Experimental, to be
+implemented.}
 }
 \value{
-
+A list with elements:
+\describe{
+ \item{res}{a \link{stats::nls} object containing the fit results}
+ \item{mz0}{the center of the m/z fit window.}
+ \item{mz1}{the lower bound of the m/z fit window.}
+ \item{mz2}{the upper bound of the m/z fit window.}
+ \item{CVf}{CV vector in fit window.}
+ \item{mMS}{Averaged spectrum along the CV axis.}
+ \item{mMStot}{Same as mMS ???}
+ \item{mzloc}{m/z vector in the fit window.}
+ \item{MSloc}{DMS signal in the fit window.}
+}
 }
 \description{
 2D peak fit

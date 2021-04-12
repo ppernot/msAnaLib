@@ -4,8 +4,11 @@
 #' @param ms_type (string; optional) Type of mass spectrum,
 #'   one of `esquire` (default) or `fticr`.
 #'
-#' @return List of three elements: `mz` = vector of m/z coordinates,
-#'   `time` = vector of time coordinates, and `MS` = DMS matrix.
+#' @return List of three elements:
+#' \describe{
+#'   \item{mz}{a m-vector of m/z coordinates}
+#'   \item{time}{a N-vector of time coordinates}
+#'   \item{MS}{a nxm DMS matrix}
 #'
 #' @export
 #'

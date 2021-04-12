@@ -7,10 +7,12 @@
 trapz(x, y)
 }
 \arguments{
-\item{y}{}
+\item{x}{(vector) x values}
+
+\item{y}{(vector) y = f(x) values}
 }
 \value{
-
+The trapezpoidal integration value.
 }
 \description{
 Trapezoidal integration

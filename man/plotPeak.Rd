@@ -2,7 +2,9 @@
 % Please edit documentation in R/plotPeak.R
 \name{plotPeak}
 \alias{plotPeak}
-\title{Plot peak fit results}
+\title{Plot peak fit results, with two components:
+(a) localization on the DMS map; (b) 1D peak fit along
+CV if type == 'CV' or along m/z otherwise.}
 \usage{
 plotPeak(
   mz,
@@ -19,11 +21,33 @@ plotPeak(
 )
 }
 \arguments{
-\item{gPars}{}
+\item{mz}{(vector) m/z vector}
+
+\item{CV}{(vector) CV vector}
+
+\item{MS}{(matrix) DMS matrix}
+
+\item{fitOut}{(object) results of a fit_xD function}
+
+\item{mex}{(nuleric) exact m/z}
+
+\item{leg}{(string) legend}
+
+\item{val}{(string) String describing best-fit parameters}
+
+\item{tag}{(string) Tag (task+target+user)}
+
+\item{type}{(string) Which coordinate for right-hand plot (default = 'CV')}
+
+\item{CV0}{(numeric) Position of the reference CV value.}
+
+\item{gPars}{(list) Graphical parameters.}
 }
 \value{
-
+Nothing. The function is used for its side effects.
 }
 \description{
-Plot peak fit results
+Plot peak fit results, with two components:
+(a) localization on the DMS map; (b) 1D peak fit along
+CV if type == 'CV' or along m/z otherwise.
 }

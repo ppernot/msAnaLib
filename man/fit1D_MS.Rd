@@ -2,16 +2,42 @@
 % Please edit documentation in R/fit1D_MS.R
 \name{fit1D_MS}
 \alias{fit1D_MS}
-\title{1D peak fit along m/z axis}
+\title{1D Gaussian peak fit along m/z axis}
 \usage{
-fit1D_MS(mz0, CV0, dmz, dCV, mz, CV, MS, fwhm_mz_nom, weighted = FALSE)
+fit1D_MS(mz0, CV0, dmz, mz, CV, MS, fwhm_mz_nom, weighted = FALSE)
 }
 \arguments{
-\item{weighted}{}
+\item{mz0}{(numeric) Center of the fit window.}
+
+\item{CV0}{(numeric) CV reference value to extract mass spectrum from
+MS matrix}
+
+\item{dmz}{(numeric) Width of the fit window.}
+
+\item{mz}{(vector) m/z vector}
+
+\item{CV}{(vector) CV vector}
+
+\item{MS}{(matrix) DMS matrix}
+
+\item{fwhm_mz_nom}{(numeric) Initial value for the peak FWHM.}
+
+\item{weighted}{(logical; optional) Poisson weighting of data
+(default: FALSE).}
 }
 \value{
-
+A list with components:
+\describe{
+ \item{mzl}{m/z vector of fit window.}
+ \item{MSl}{MS vector in fit window}
+ \item{res}{a \link{stats::nls} object containing the fit results}
+ \item{mz0}{the center of the fit window.}
+ \item{mz1}{the lower bound of the fit window.}
+ \item{mz2}{the upper bound of the fit window.}
+ \item{CV}{CV vector.}
+ \item{mMStot}{full MS vector at CV reference value}
+}
 }
 \description{
-1D peak fit along m/z axis
+1D Gaussian peak fit along m/z axis
 }

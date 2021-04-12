@@ -1,8 +1,8 @@
 #' Read targets file
 #'
-#' @param file
+#' @param file (string) A filename
 #'
-#' @return
+#' @return A dataframe
 #' @export
 #'
 #' @examples

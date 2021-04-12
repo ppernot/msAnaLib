@@ -1,18 +1,20 @@
-#' Plot peak fit results
+#' Plot peak fit results, with two components:
+#' (a) localization on the DMS map; (b) 1D peak fit along
+#' CV if type == 'CV' or along m/z otherwise.
 #'
-#' @param mz
-#' @param CV
-#' @param MS
-#' @param fitOut
-#' @param mex
-#' @param leg
-#' @param val
-#' @param tag
-#' @param type
-#' @param CV0
-#' @param gPars
+#' @param mz (vector) m/z vector
+#' @param CV (vector) CV vector
+#' @param MS (matrix) DMS matrix
+#' @param fitOut (object) results of a fit_xD function
+#' @param mex (nuleric) exact m/z
+#' @param leg (string) legend
+#' @param val (string) String describing best-fit parameters
+#' @param tag (string) Tag (task+target+user)
+#' @param type (string) Which coordinate for right-hand plot (default = 'CV')
+#' @param CV0 (numeric) Position of the reference CV value.
+#' @param gPars (list) Graphical parameters.
 #'
-#' @return
+#' @return Nothing. The function is used for its side effects.
 #' @export
 #'
 #' @examples
@@ -159,7 +161,6 @@ plotPeak = function(
         x=CVlim[1],
         y=ylim[2]-0.75*strheight(val,units='user',cex=0.8),
         yjust = 0,
-        # title  = val,
         legend = val,
         bty    = 'n',
         cex    = 0.8)

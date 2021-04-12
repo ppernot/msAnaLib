@@ -2,16 +2,23 @@
 % Please edit documentation in R/fwm.R
 \name{fwm}
 \alias{fwm}
-\title{Weighted mean and uncertainty}
+\title{Weighted mean and uncertainty by the Dersimonian-Laird method.}
 \usage{
 fwm(x, ux)
 }
 \arguments{
-\item{ux}{}
+\item{x}{(vector) set of values to be averages.}
+
+\item{ux}{(vector) uncertainties of values to be averaged.}
 }
 \value{
-
+A list with elements:
+\describe{
+  \item{wm}{Weighted mean.}
+  \item{uwm}{Uncertainty of the weighted mean.}
+}
 }
 \description{
-Weighted mean and uncertainty
+A dark uncertainty component is added for the statistical
+compatibility of the averaged values.
 }

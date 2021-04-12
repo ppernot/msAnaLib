@@ -7,10 +7,10 @@
 readTargetsFile(file)
 }
 \arguments{
-\item{file}{}
+\item{file}{(string) A filename}
 }
 \value{
-
+A dataframe
 }
 \description{
 Read targets file

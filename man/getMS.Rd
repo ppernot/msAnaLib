@@ -13,8 +13,7 @@ getMS(file, ms_type = c("esquire", "fticr"))
 one of `esquire` (default) or `fticr`.}
 }
 \value{
-List of three elements: `mz` = vector of m/z coordinates,
-  `time` = vector of time coordinates, and `MS` = DMS matrix.
+
 }
 \description{
 Get MS from file

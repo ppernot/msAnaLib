@@ -7,10 +7,10 @@
 readTasksFile(file)
 }
 \arguments{
-\item{file}{}
+\item{file}{(string) a filename}
 }
 \value{
-
+A dataframe
 }
 \description{
 Read tasks file

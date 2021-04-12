@@ -4,13 +4,24 @@
 \alias{bslCorMS}
 \title{Correct baseline}
 \usage{
-bslCorMS(MS, baseline_cor = "median")
+bslCorMS(MS, baseline_cor = "median+global")
 }
 \arguments{
-\item{baseline_cor}{}
+\item{MS}{(matrix; mandatory) a 2D matrix}
+
+\item{baseline_cor}{(string; mandatory) the correction method to apply
+(default: "median+global"). At the moment, the options are:
+\describe{
+  \item{'median' or 'mean'}{The constant baseline correction is
+    based on the median (default) or mean of the signal.}
+  \item{'row' or 'column' or 'global'}{The correction is estimated
+    from and applied  to each row or column of the matrix, or
+    estimated from and applied to the whole matrix (default).}
+  \item{NULL}{The baseline correction is skipped.}
+}}
 }
 \value{
-
+A baseline-corrected matrix.
 }
 \description{
 Correct baseline
