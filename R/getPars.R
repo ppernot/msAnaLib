@@ -27,7 +27,11 @@ getPars = function(
   res,
   dimfit = c(0,1,2)
 ){
-  dimfit = match.arg(dimfit)
+  if(! dimfit %in% 0:2) {
+    message('>>> Error: dimfit should be 0, 1, or 2 !')
+    stop(call. = FALSE)
+  }
+
   if (dimfit == 2)
     getPars2D(res)
   else

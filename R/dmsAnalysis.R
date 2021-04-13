@@ -38,7 +38,10 @@
 #'   specifications. See \link{getPeakSpecs}.
 #'   values.
 #'
-#' @return Returns nothing; used for its side effects.
+#' @return The function is mostly used for its side effects.
+#'   It invisibly returns a dataframe of results issued from
+#'   \link{gatherResults}.
+#'
 #' @export
 #'
 #' @examples
@@ -167,7 +170,10 @@ dmsAnalysis = function(
   #*********************************************************
 
   ms_type = match.arg(ms_type)
-  fit_dim = match.arg(fit_dim)
+  if(!fit_dim %in% 0:2) {
+    message('>>> Error: fit_dim should be 0, 1, or 2 !')
+    stop(call. = FALSE)
+  }
 
   assertive::assert_all_are_existing_files(dataRepo)
   assertive::assert_all_are_existing_files(figRepo)
@@ -551,7 +557,15 @@ dmsAnalysis = function(
       colnames(xic) = c(nam0,targets[it,1])
       colnames(xfi) = c(nam0,targets[it,1])
       #*********************************************************
+
+      # Stop after first target in first task...
+      if(debug)
+        break()
     }
+
+    #*********************************************************
+    # End of targets loop ----
+    #*********************************************************
 
     #*********************************************************
     # Global Heat maps
@@ -611,17 +625,16 @@ dmsAnalysis = function(
     )
     #*********************************************************
 
-    if(debug){
-      message('Ended prematurely (debug)...')
-      stop(call. = FALSE)
+    if(debug) {
+      message('>>> Stopped by debug = TRUE...\n')
+      break()
     }
 
-    #*********************************************************
-    # End of targets loop ----
-    #*********************************************************
   }
 
   #*********************************************************
   # End of tasks loop ----
   #*********************************************************
+
+  invisible(resu)
 }

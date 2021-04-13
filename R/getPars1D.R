@@ -28,7 +28,10 @@ getPars1D <- function(
   fit_dim = c(1,0)
 ) {
 
-  fit_dim = match.arg(fit_dim)
+  if(!fit_dim %in% 0:1) {
+    message('>>> Error: fit_dim should be 0 or 1 !')
+    stop(call. = FALSE)
+  }
 
   # Get best params and uncertainty
   v   = summary(res)$parameters[,"Estimate"]   # Best params

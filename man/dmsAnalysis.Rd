@@ -82,7 +82,9 @@ specifications. See \link{getPeakSpecs}.
 values.}
 }
 \value{
-Returns nothing; used for its side effects.
+The function is mostly used for its side effects.
+  It invisibly returns a dataframe of results issued from
+  \link{gatherResults}.
 }
 \description{
 Analysis of DMS file
