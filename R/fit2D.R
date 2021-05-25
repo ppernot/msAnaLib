@@ -20,7 +20,7 @@
 #'
 #' @return A list with elements:
 #' \describe{
-#'  \item{res}{a \link{stats::nls} object containing the fit results}
+#'  \item{res}{a \link{nls} object containing the fit results}
 #'  \item{mz0}{the center of the m/z fit window.}
 #'  \item{mz1}{the lower bound of the m/z fit window.}
 #'  \item{mz2}{the upper bound of the m/z fit window.}

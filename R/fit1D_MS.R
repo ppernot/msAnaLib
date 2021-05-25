@@ -15,7 +15,7 @@
 #' \describe{
 #'  \item{mzl}{m/z vector of fit window.}
 #'  \item{MSl}{MS vector in fit window}
-#'  \item{res}{a \link{stats::nls} object containing the fit results}
+#'  \item{res}{a \link{nls} object containing the fit results}
 #'  \item{mz0}{the center of the fit window.}
 #'  \item{mz1}{the lower bound of the fit window.}
 #'  \item{mz2}{the upper bound of the fit window.}

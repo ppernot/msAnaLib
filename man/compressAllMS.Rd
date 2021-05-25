@@ -34,6 +34,11 @@ Compression only for `fticr` MS.}
 either `grid`, `targets` (default),
 or their combination `grid+targets`.}
 
+\item{tgTable}{(string; optional)  Path to targets file.}
+
+\item{dmzTarget}{(numeric; optional) Half-width of m/z interval
+centered on target reference m/z value.}
+
 \item{mzMin}{(numeric; optional) Min m/z value of compression grid}
 
 \item{mzMax}{(numeric; optional) Max m/z value of compression grid}
@@ -42,11 +47,6 @@ or their combination `grid+targets`.}
 
 \item{test}{(logical; optional) if TRUE, shodt run to check the
 arguments validity and the compression efficiency}
-
-\item{targets}{(string; optional)  Path to targets file.}
-
-\item{dmzTargets}{(numeric; optional) Half-width of m/z interval
-centered on target reference m/z value.}
 }
 \value{
 Returns nothing. It is used for its side effects.

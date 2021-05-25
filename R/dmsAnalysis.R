@@ -292,7 +292,13 @@ dmsAnalysis = function(
       sep = '\t',
       stringsAsFactors = FALSE
     )
-    CV = rev(CV0[, 4]) # We want increasing CVs
+    CV = CV0[, 4]
+    # We want increasing CVs
+    reverseCV = FALSE
+    if(CV[2] < CV[1])
+      reverseCV = TRUE
+    if(reverseCV)
+      CV = rev(CV)
     #*********************************************************
 
     #*********************************************************
@@ -305,16 +311,21 @@ dmsAnalysis = function(
 
     CV0   = Tasks[task,'CV0']
     iCV   = which.min(abs(CV - CV0))
-    selCV = which(CV <= CV[iCV])
+    selCV = which(CV >= CV[iCV])
+    if(reverseCV)
+      selCV = which(CV <= CV[iCV])
     nCV   = length(selCV)
 
     ncut  = min(nt,nCV)
     selt  = selt[1:ncut]
-    selCV = rev(rev(selCV)[1:ncut])
+    selCV = selCV[1:ncut]
+    if(reverseCV)
+      selCV = rev(rev(selCV)[1:ncut])
 
     time = time[selt]
     MS   = MS[selt,]
-    MS   = apply(MS, 2, rev) # reverse column to conform with CV
+    if(reverseCV)
+      MS   = apply(MS, 2, rev) # reverse column to conform with CV
     CV   = CV[selCV]
     nCV  = length(CV)
     #*********************************************************

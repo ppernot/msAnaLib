@@ -19,7 +19,7 @@
 #
 #' @return A list with components:
 #' \describe{
-#'  \item{res}{a \link{stats::nls} object containing the fit results}
+#'  \item{res}{a \link{nls} object containing the fit results}
 #'  \item{mz0}{the center of the averaging window.}
 #'  \item{mz1}{the lower bound of the averaging window.}
 #'  \item{mz2}{the upper bound of the averaging window.}

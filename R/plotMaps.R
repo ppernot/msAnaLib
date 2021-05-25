@@ -1,18 +1,18 @@
 #' Plot DMS fit maps
 #'
-#' @param mz
-#' @param CV
-#' @param MS
-#' @param mex
-#' @param leg
-#' @param tag
-#' @param mzlim
-#' @param CVlim
-#' @param zlim
-#' @param logz
-#' @param gPars
+#' @param mz tbd
+#' @param CV tbd
+#' @param MS tbd
+#' @param mex tbd
+#' @param leg tbd
+#' @param tag tbd
+#' @param mzlim tbd
+#' @param CVlim tbd
+#' @param zlim tbd
+#' @param logz tbd
+#' @param gPars tbd
 #'
-#' @return
+#' @return tbd
 #' @export
 #'
 #' @examples

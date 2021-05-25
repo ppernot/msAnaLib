@@ -42,7 +42,7 @@ or their combination `grid+targets`.}
 
 \item{targets}{(string; optional)  Path to targets file.}
 
-\item{dmzTargets}{(numeric; optional) Half-width of m/z interval
+\item{dmzTarget}{(numeric; optional) Half-width of m/z interval
 centered on target reference m/z value.}
 }
 \value{

@@ -13,8 +13,8 @@
 #' @param mzMin (numeric; optional) Min m/z value of compression grid
 #' @param mzMax (numeric; optional) Max m/z value of compression grid
 #' @param dmz (numeric; optional) m/z step or compression grid
-#' @param targets (string; optional)  Path to targets file.
-#' @param dmzTargets (numeric; optional) Half-width of m/z interval
+#' @param tgTable (string; optional)  Path to targets file.
+#' @param dmzTarget (numeric; optional) Half-width of m/z interval
 #'   centered on target reference m/z value.
 #' @param test (logical; optional) if TRUE, shodt run to check the
 #'   arguments validity and the compression efficiency
