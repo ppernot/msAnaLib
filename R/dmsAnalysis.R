@@ -280,6 +280,7 @@ dmsAnalysis = function(
     mz   = lMS$mz
     MS   = lMS$MS
     rm(lMS) # Clean-up memory
+
     #*********************************************************
 
     #*********************************************************
@@ -293,41 +294,86 @@ dmsAnalysis = function(
       stringsAsFactors = FALSE
     )
     CV = CV0[, 4]
-    # We want increasing CVs
-    reverseCV = FALSE
-    if(CV[2] < CV[1])
-      reverseCV = TRUE
-    if(reverseCV)
-      CV = rev(CV)
-    #*********************************************************
 
     #*********************************************************
     ## Ensure CV & MS tables conformity
     #*********************************************************
     t0   = Tasks[task,'t0']
     it   = which.min(abs(time - t0))
-    selt = which(time >= time[it])
+    selt = it:length(time)
     nt   = length(selt)
 
     CV0   = Tasks[task,'CV0']
     iCV   = which.min(abs(CV - CV0))
-    selCV = which(CV >= CV[iCV])
-    if(reverseCV)
-      selCV = which(CV <= CV[iCV])
+    selCV = iCV:length(CV)
     nCV   = length(selCV)
 
-    ncut  = min(nt,nCV)
-    selt  = selt[1:ncut]
-    selCV = selCV[1:ncut]
-    if(reverseCV)
-      selCV = rev(rev(selCV)[1:ncut])
+    ncut = min(nt,nCV)
 
-    time = time[selt]
-    MS   = MS[selt,]
-    if(reverseCV)
-      MS   = apply(MS, 2, rev) # reverse column to conform with CV
-    CV   = CV[selCV]
+    time = time[selt[1:ncut]]
+    MS   = MS[selt[1:ncut],]
+    CV   = CV[selCV[1:ncut]]
     nCV  = length(CV)
+
+    #*********************************************************
+    # Normalize CV ----
+    #*********************************************************
+
+    # Ensure unicity
+    tCV = table(CV)
+
+    if(any(tCV >1)) {
+      tabAvrg = list()
+
+      # Treat only if duplicates exist
+      uCV = as.numeric(names(tCV))
+      uMS = matrix( 0, nrow = length(uCV), ncol = ncol(MS))
+      uTime = vector(length=length(uCV))
+      for(i in seq_along(uCV)) {
+        sel = which(CV == uCV[i])
+        if(tCV[i] == 1) {
+          # Copy
+          uMS[i,]  = MS[sel,]
+          uTime[i] = time[sel]
+        } else {
+          # Average (leaving borders out)
+          sel = sel[-1]
+          sel = sel[-length(sel)]
+          if(length(sel) > 1) {
+            uMS[i,]  = apply(MS[sel,], 2, mean)
+            uTime[i] = mean(time[sel])
+          } else {
+            # Copy
+            uMS[i,]  = MS[sel,]
+            uTime[i] = time[sel]
+          }
+        }
+        tabAvrg[[i]] = list(
+          CV = uCV[i],
+          nCV = tCV[i],
+          times = time[sel],
+          meanTime = uTime[i]
+        )
+      }
+      CV = uCV
+      MS = uMS
+      time = uTime
+
+      # Dump averaging scheme
+      if(length(tabAvrg) >0)
+        rlist::list.save(
+          tabAvrg,
+          file = paste0(tabRepo, tag, '_AveragingScheme.yaml')
+        )
+
+    }
+
+    # Order CVs
+    io = order(CV)
+    CV   = CV[io]
+    time = time[io]
+    MS   = MS[io,]
+
     #*********************************************************
 
     #*********************************************************
