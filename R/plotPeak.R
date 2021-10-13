@@ -27,6 +27,7 @@ plotPeak = function(
   tag = NA,
   type = 'CV',
   CV0 = NA,
+  expandFactor = 5,
   gPars
 ) {
 
@@ -35,13 +36,6 @@ plotPeak = function(
   # Expose fitOut list
   for (n in names(fitOut))
     assign(n,rlist::list.extract(fitOut,n))
-
-  mzlim  = c(mz1,mz2)
-  CVlim  = range(CV)
-  if(type == 'CV')
-    CVlimf = range(CVf)
-  else
-    CVlimf = range(CV)
 
   # Expose gPars list
   for (n in names(gPars))
@@ -56,12 +50,33 @@ plotPeak = function(
     cex   = cex
   )
 
+  if(type == 'CV') {
+    CVp = CV
+    MSp = MS
+  }else{
+    # Fill matrix CV-wise for better image
+    CVp = seq(min(CV),max(CV),length.out=expandFactor*length(CV))
+    MSp = matrix(0,nrow=length(CVp),ncol=ncol(MS))
+    for(i in 1:length(CV)) {
+      iCV = which.min(abs(CVp-CV[i])) # Closest point
+      CVp[iCV] = CV[i]
+      MSp[iCV,] = MS[i,]
+    }
+  }
+
+  mzlim  = c(mz1,mz2)
+  CVlim  = range(CV)
+  if(type == 'CV')
+    CVlimf = range(CVf)
+  else
+    CVlimf = range(CVp)
+
   ## 1. image
-  sel1 = apply(cbind(CV-CVlim[1],CV-CVlim[2]),1,prod) <= 0
+  sel1 = apply(cbind(CVp-CVlim[1],CVp-CVlim[2]),1,prod) <= 0
   sel2 = apply(cbind(mz-mzlim[1],mz-mzlim[2]),1,prod) <= 0
 
   image(
-    CV[sel1], mz[sel2], MS[sel1,sel2],
+    CVp[sel1], mz[sel2], MSp[sel1,sel2],
     xlim = CVlim,
     xlab = 'CV',
     ylim = mzlim,
@@ -84,8 +99,6 @@ plotPeak = function(
     if(type == 'CV')
       rect(CVlimf[1], mz1, CVlimf[2], mz2,
            col = cols_tr[4], border = NA)
-  } else {
-    v = rep(NA,5)
   }
 
 
@@ -124,7 +137,7 @@ plotPeak = function(
     xmod = seq(min(CV),max(CV),length.out = 1000)
     if(class(res) != 'try-error') {
       v   = summary(res)$parameters[,"Estimate"]
-      vmod = peakShape(xmod, v)
+      vmod = peak_shape(xmod, v)
     } else {
       v = NA
       vmod = rep(NA,length(xmod))
@@ -161,6 +174,7 @@ plotPeak = function(
         x=CVlim[1],
         y=ylim[2]-0.75*strheight(val,units='user',cex=0.8),
         yjust = 0,
+        # title  = val,
         legend = val,
         bty    = 'n',
         cex    = 0.8)
@@ -171,7 +185,7 @@ plotPeak = function(
     xmod = seq(mz1,mz2,length.out = 1000)
     if(class(res) != 'try-error') {
       v   = summary(res)$parameters[,"Estimate"]
-      vmod = peakShape(xmod, v)
+      vmod = peak_shape(xmod, v)
     } else {
       v = NA
       vmod = rep(NA,length(xmod))
