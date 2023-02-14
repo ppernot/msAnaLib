@@ -17,6 +17,7 @@ plotPeak(
   tag = NA,
   type = "CV",
   CV0 = NA,
+  expandFactor = 5,
   gPars
 )
 }

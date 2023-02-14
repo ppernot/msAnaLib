@@ -1,7 +1,7 @@
 Package: msAnaLib
 Type: Package
 Title: Functions for analysis of DMS spectra
-Version: 0.0
+Version: 0.1
 Authors@R: 
     person(given = "Pascal ",
            family = "PERNOT",
@@ -10,6 +10,6 @@ Authors@R:
 Description: Functions for analysis of DMS spectra
 License: GPL (>=3) + file LICENSE
 Encoding: UTF-8
-Imports: utils,xtable,mixtools,inlmisc,rlist,repmis,assertive,data.table
+Imports: utils,xtable,mixtools,rlist,repmis,assertive,data.table
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.0

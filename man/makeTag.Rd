@@ -13,9 +13,6 @@ makeTag(CVTable, msTable, userTag)
 
 \item{userTag}{(string) string to append to results filenames.}
 }
-\value{
-
-}
 \description{
 Create a tag from DMS and CV filenames and a user tag.
 }
