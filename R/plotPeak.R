@@ -99,8 +99,9 @@ plotPeak = function(
     if(type == 'CV')
       rect(CVlimf[1], mz1, CVlimf[2], mz2,
            col = cols_tr[4], border = NA)
+  } else {
+    v = NA
   }
-
 
   if (!is.na(leg))
     title(main = leg, line = 0.5)
@@ -119,7 +120,7 @@ plotPeak = function(
   if (!is.na(mex))
     abline(h = mex, lty = 1, col = cols[2])
 
-  if (type != 'CV') {
+  if (type != 'CV' & !any(is.na(v))) {
     abline(h = v[1], lty = 2, col = cols[2])
   } else {
     if( length(v) == 3) {
