@@ -1,6 +1,6 @@
 #' Calculate 1D Gaussian peak shape
 #'
-#' @param x (vector) a vector of coordinales
+#' @param x (vector) a vector of coordinates
 #' @param p (named vector) a named vector of parameters
 #'
 #' @return A vector of peak intensity values

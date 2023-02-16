@@ -137,7 +137,7 @@ plotPeak = function(
     xmod = seq(min(CV),max(CV),length.out = 1000)
     if(class(res) != 'try-error') {
       v   = summary(res)$parameters[,"Estimate"]
-      vmod = peak_shape(xmod, v)
+      vmod = peakShape(xmod, v)
     } else {
       v = NA
       vmod = rep(NA,length(xmod))
@@ -185,7 +185,7 @@ plotPeak = function(
     xmod = seq(mz1,mz2,length.out = 1000)
     if(class(res) != 'try-error') {
       v   = summary(res)$parameters[,"Estimate"]
-      vmod = peak_shape(xmod, v)
+      vmod = peakShape(xmod, v)
     } else {
       v = NA
       vmod = rep(NA,length(xmod))
