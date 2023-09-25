@@ -119,7 +119,7 @@ fit2D <- function(
     mx  = mx + dmz / 2,
     sx  = 4 * sx0,
     my  = CV0 + dCV / 10,
-    sy  = 1.2 * sy0,
+    sy  = 1.5 * sy0,
     A   = 1.5 * A0
   )
 

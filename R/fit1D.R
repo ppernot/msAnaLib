@@ -102,7 +102,7 @@ fit1D <- function(
   )
   upper = c(
     mu    = CV0 + dCV/10,
-    sigma = 1.2 * sigma0,
+    sigma = 1.5 * sigma0,
     A     = 1.5 * A0
   )
 
