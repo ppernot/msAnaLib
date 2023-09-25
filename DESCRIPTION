@@ -1,7 +1,7 @@
 Package: msAnaLib
 Type: Package
 Title: Functions for analysis of DMS spectra
-Version: 0.1a
+Version: 0.1c
 Authors@R: 
     person(given = "Pascal ",
            family = "PERNOT",
