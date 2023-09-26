@@ -7,7 +7,7 @@
 peakShape(x, p)
 }
 \arguments{
-\item{x}{(vector) a vector of coordinales}
+\item{x}{(vector) a vector of coordinates}
 
 \item{p}{(named vector) a named vector of parameters}
 }
